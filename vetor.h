@@ -1,5 +1,5 @@
-#ifndef ESTRUTURAS_DADOS_H
-#define ESTRUTURAS_DADOS_H
+#ifndef VETOR_H
+#define VETOR_H
 
 struct candidato {
     char estado[3];
