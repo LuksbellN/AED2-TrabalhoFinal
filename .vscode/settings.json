@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "arvore_binaria.h": "c",
+        "arvore_avl.h": "c",
+        "processa_dados.h": "c",
+        "stdio.h": "c",
+        "vetor.h": "c",
+        "ordenacao.h": "c"
+    }
+}
