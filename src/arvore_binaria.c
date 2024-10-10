@@ -1,15 +1,13 @@
-#include "arvore_binaria.h"
+#include "../include/arvore_binaria.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-NoCandidato *insere(NoCandidato *raiz, const struct candidato *novo_candidato)
-{
-  if (raiz == NULL)
-  {
+
+NoCandidato *insere(NoCandidato *raiz, const struct candidato *novo_candidato) {
+  if (raiz == NULL) {
     NoCandidato *novoNo = (NoCandidato *)malloc(sizeof(NoCandidato));
-    if (novoNo == NULL)
-    {
+    if (novoNo == NULL) {
       fprintf(stderr, "Erro: Falha na alocação de memória\n");
       exit(1);
     }
@@ -19,44 +17,21 @@ NoCandidato *insere(NoCandidato *raiz, const struct candidato *novo_candidato)
   }
 
   int cmp = comparar_ordenacao_arvore(*novo_candidato, raiz->candidato);
-  if (cmp < 0)
-  {
+  if (cmp < 0) {
     raiz->esquerda = insere(raiz->esquerda, novo_candidato);
-  }
-  else if (cmp > 0)
-  {
+  } else if (cmp > 0) {
     raiz->direita = insere(raiz->direita, novo_candidato);
   }
 
   return raiz;
 }
 
-int comparar_ordenacao_arvore(struct candidato cand1, struct candidato cand2)
-{
-  // 1° opção de ordenação
-  if (strcmp(cand1.estado, cand2.estado) != 0)
-  {
-    return strcmp(cand1.estado, cand2.estado);
-  }
-
-  // 2° opção de ordenação
-  if (strcmp(cand1.cidade, cand2.cidade) != 0)
-  {
-    return strcmp(cand1.cidade, cand2.cidade);
-  }
-
-  // 3° e última opção de ordenação
-  return cand1.nr_candidato - cand2.nr_candidato;
-}
-
-NoCandidato *ler_arquivo_arvore_binaria(const char *caminho)
-{
+void ler_arquivo_arvore_binaria(ArvoreBinaria *raiz, const char *caminho) {
   NoCandidato *arvore = NULL;
   FILE *arquivo = fopen(caminho, "r");
-  if (arquivo == NULL)
-  {
+  if (arquivo == NULL) {
     fprintf(stderr, "Erro ao abrir o arquivo.\n");
-    return NULL;
+    return;
   }
 
   char linha[500];
@@ -65,16 +40,14 @@ NoCandidato *ler_arquivo_arvore_binaria(const char *caminho)
   // Lê e descarta a primeira linha (cabeçalho)
   fgets(linha, sizeof(linha), arquivo);
 
-  while (fgets(linha, sizeof(linha), arquivo))
-  {
+  while (fgets(linha, sizeof(linha), arquivo)) {
+    linha[strcspn(linha, "\n")] = 0;
     char *token;
     int i = 0;
     // Separa linha por ';' e preenche os dados do registro de candidato
     token = strtok(linha, ";");
-    while (token != NULL && i < 10)
-    {
-      switch (i)
-      {
+    while (token != NULL && i < 10) {
+      switch (i) {
       case 0:
         strcpy(novo_candidato.estado, token);
         break;
@@ -114,41 +87,37 @@ NoCandidato *ler_arquivo_arvore_binaria(const char *caminho)
   }
 
   fclose(arquivo);
-  return arvore;
+  raiz->raiz = arvore;
+  return;
 }
 
-void imprimir(NoCandidato *raiz)
-{
-  if (raiz != NULL)
-  {
+void imprimir(NoCandidato *raiz) {
+  if (raiz != NULL) {
     imprimir(raiz->esquerda);
 
-    printf("Estado: %s, Cidade: %s, Nr: %d, Nome: %s\n",
-           raiz->candidato.estado, raiz->candidato.cidade, raiz->candidato.nr_candidato, raiz->candidato.nm_candidato);
+    printf("Estado: %s, Cidade: %s, Nr: %d, Nome: %s\n", raiz->candidato.estado,
+           raiz->candidato.cidade, raiz->candidato.nr_candidato,
+           raiz->candidato.nm_candidato);
     imprimir(raiz->direita);
   }
 }
 
-NoCandidato *buscarMaior(NoCandidato *raiz)
-{
+NoCandidato *buscarMaior(NoCandidato *raiz) {
   if (raiz == NULL || raiz->direita == NULL)
     return raiz;
 
   return buscarMaior(raiz->direita);
 }
 
-NoCandidato *buscarMenor(NoCandidato *raiz)
-{
+NoCandidato *buscarMenor(NoCandidato *raiz) {
   if (raiz == NULL || raiz->esquerda == NULL)
     return raiz;
 
   return buscarMenor(raiz->esquerda);
 }
 
-int encontrarAltura(NoCandidato *raiz)
-{
-  if (raiz == NULL)
-  {
+int encontrarAltura(NoCandidato *raiz) {
+  if (raiz == NULL) {
     return -1;
   }
   int alturaEsquerda = encontrarAltura(raiz->esquerda);
@@ -157,10 +126,8 @@ int encontrarAltura(NoCandidato *raiz)
   return 1 + (alturaEsquerda > alturaDireita ? alturaEsquerda : alturaDireita);
 }
 
-void liberar_arvore(NoCandidato *raiz)
-{
-  if (raiz == NULL)
-  {
+void liberar_arvore(NoCandidato *raiz) {
+  if (raiz == NULL) {
     return;
   }
 

@@ -5,12 +5,10 @@ TARGET = main     # Nome do executável
 
 # Diretórios
 SRCDIR = .
-AUXDIR = auxiliares
-DATADIR = estruturas_dados
-SEACRHDIR = buscas
+DIR = src
 
 # Arquivos fonte
-SRC = $(SRCDIR)/main.c $(wildcard $(AUXDIR)/*.c) $(wildcard $(DATADIR)/*.c) $(wildcard $(SEACRHDIR)/*.c)
+SRC = $(SRCDIR)/main.c $(wildcard $(DIR)/*.c) 
 
 # Regras
 all: $(TARGET)

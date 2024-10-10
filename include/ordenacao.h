@@ -1,7 +1,9 @@
 #ifndef ORDENACAO_H
 #define ORDENACAO_H
 
-#include "../estruturas_dados/vetor.h"
+#include "processa_dados.h"
+#include "vetor.h"
+
 
 // Função de ordenação Shellsort
 void shellsort(struct candidato *vetor, int n);

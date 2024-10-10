@@ -6,6 +6,10 @@
         "processa_dados.h": "c",
         "stdio.h": "c",
         "vetor.h": "c",
-        "ordenacao.h": "c"
-    }
+        "ordenacao.h": "c",
+        "menu_filtros.h": "c",
+        "time.h": "c",
+        "buscas_arvore_avl.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
