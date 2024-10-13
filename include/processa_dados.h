@@ -32,7 +32,7 @@ typedef struct NoCandidatoAVL {
   struct candidato candidato;
   int fator;
   int altura;
-  struct NoCandidatoAVL *esquerda, *direita, *pai;
+  struct NoCandidatoAVL *esquerda, *direita;
 } NoCandidatoAVL;
 
 typedef struct {
@@ -42,17 +42,6 @@ typedef struct {
 int processar_dados(int estrutura_dados, struct candidato **vetor,
                     ArvoreBinaria *arvore, ArvoreAVL *arvore_avl,
                     const char *caminho);
-
-void busca_estado(struct candidato *vetor, int indice, ArvoreBinaria *arvore,
-                  ArvoreAVL *arvore_avl, int estrutura_dados);
-
-void busca_estado_cidade(struct candidato *vetor, int indice,
-                         ArvoreBinaria *arvore, ArvoreAVL *arvore_avl,
-                         int estrutura_dados);
-
-void busca_estado_cidade_numero(struct candidato *vetor, int indice,
-                                ArvoreBinaria *arvore, ArvoreAVL *arvore_avl,
-                                int estrutura_dados);
 
 int comparar_ordenacao_arvore(struct candidato cand1, struct candidato cand2);
 

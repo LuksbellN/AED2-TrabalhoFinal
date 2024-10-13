@@ -5,7 +5,9 @@
 
 
 NoCandidato *insere(NoCandidato *raiz, const struct candidato *novo_candidato) {
+  // Verifica se o local correto foi encontrado
   if (raiz == NULL) {
+    // Cria o novo nó com o candidato
     NoCandidato *novoNo = (NoCandidato *)malloc(sizeof(NoCandidato));
     if (novoNo == NULL) {
       fprintf(stderr, "Erro: Falha na alocação de memória\n");
@@ -16,6 +18,7 @@ NoCandidato *insere(NoCandidato *raiz, const struct candidato *novo_candidato) {
     return novoNo;
   }
 
+  // Comparação por 1. Estado, 2. Cidade, 3. Nr Candidato
   int cmp = comparar_ordenacao_arvore(*novo_candidato, raiz->candidato);
   if (cmp < 0) {
     raiz->esquerda = insere(raiz->esquerda, novo_candidato);

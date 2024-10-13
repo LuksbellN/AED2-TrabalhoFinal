@@ -53,7 +53,7 @@ ResultadoDinamico busca_estado_arvore_binaria(NoCandidato *raiz, char *estado) {
     printf("\nResultados:\n\n");
     for (int i = 0; i < tamanhoResultado; i++) {
 
-      printf("Resultado:\nEstado: %s, Cidade: %s, Nr: %d, Nome: %s\n",
+      printf("Estado: %s, Cidade: %s, Nr: %d, Nome: %s\n",
              vetorResultado[i].estado, vetorResultado[i].cidade,
              vetorResultado[i].nr_candidato, vetorResultado[i].nm_candidato);
     }

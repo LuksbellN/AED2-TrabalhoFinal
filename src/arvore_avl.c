@@ -3,11 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 NoCandidatoAVL *
 insere_arvore_binaria_AVL(NoCandidatoAVL *raiz,
                           const struct candidato *novo_candidato) {
+  // Verifica se encontrou o local correto da árvore binária
   if (raiz == NULL) {
+    // Insere candidato
     NoCandidatoAVL *novoNo = (NoCandidatoAVL *)malloc(sizeof(NoCandidatoAVL));
     if (novoNo == NULL) {
       fprintf(stderr, "Erro: Falha na alocação de memória\n");
@@ -20,6 +21,7 @@ insere_arvore_binaria_AVL(NoCandidatoAVL *raiz,
     return novoNo;
   }
 
+  // Comparação por 1. Estado, 2. Cidade, 3. Nr Candidato
   int cmp = comparar_ordenacao_arvore(*novo_candidato, raiz->candidato);
   if (cmp < 0) {
     raiz->esquerda = insere_arvore_binaria_AVL(raiz->esquerda, novo_candidato);
@@ -37,24 +39,35 @@ insere_arvore_binaria_AVL(NoCandidatoAVL *raiz,
   raiz->fator = altura(raiz->esquerda) - altura(raiz->direita);
   int balanco = raiz->fator;
 
-  // Caso Esquerda-Esquerda
+  // Checar e rebalancear árvore
+  return rebalancear_arvore(raiz, novo_candidato, balanco);
+}
+
+NoCandidatoAVL *rebalancear_arvore(NoCandidatoAVL *raiz,
+                                   const struct candidato *novo_candidato,
+                                   int balanco) {
+  // Caso Esquerda-Esquerda, balanço maior que 1 e novo_candidato é "menor" que
+  // o filho a esquerda da raiz
   if (balanco > 1 &&
       comparar_ordenacao_arvore(*novo_candidato, raiz->esquerda->candidato) < 0)
     return rotacionar_direita(raiz);
 
-  // Caso Direita-Direita
+  // Caso Direita-Direita, balanço menor que -1 e novo_candidato é "maior" que o
+  // filho a direita da raiz
   if (balanco < -1 &&
       comparar_ordenacao_arvore(*novo_candidato, raiz->direita->candidato) > 0)
     return rotacionar_esquerda(raiz);
 
-  // Caso Esquerda-Direita
+  // Caso Esquerda-Direita, balanço maior que 1 e novo_candidato é "maior" que o
+  // filho a esquerda da raiz
   if (balanco > 1 && comparar_ordenacao_arvore(*novo_candidato,
                                                raiz->esquerda->candidato) > 0) {
     raiz->esquerda = rotacionar_esquerda(raiz->esquerda);
     return rotacionar_direita(raiz);
   }
 
-  // Caso Direita-Esquerda
+  // Caso Direita-Esquerda, balanço menor que -1 e novo_candidato é "menor" que
+  // o filho a direita da raiz
   if (balanco < -1 && comparar_ordenacao_arvore(*novo_candidato,
                                                 raiz->direita->candidato) < 0) {
     raiz->direita = rotacionar_direita(raiz->direita);
@@ -68,9 +81,12 @@ NoCandidatoAVL *rotacionar_direita(NoCandidatoAVL *raiz) {
   NoCandidatoAVL *p1 = raiz->esquerda;
   NoCandidatoAVL *p2 = p1->direita;
 
+  // raiz vira filho-direito de p1
   p1->direita = raiz;
+  // p2 vira o filho-esquerdo da raiz original
   raiz->esquerda = p2;
-
+  
+  // Recalcula a altura
   raiz->altura = 1 + (altura(raiz->esquerda) > altura(raiz->direita)
                           ? altura(raiz->esquerda)
                           : altura(raiz->direita));
@@ -86,9 +102,12 @@ NoCandidatoAVL *rotacionar_esquerda(NoCandidatoAVL *raiz) {
   NoCandidatoAVL *p1 = raiz->direita;
   NoCandidatoAVL *p2 = p1->esquerda;
 
+  // raiz vira filho-esquerdo de p1
   p1->esquerda = raiz;
+  // p2 vira o filho-direito da raiz original
   raiz->direita = p2;
 
+  // Recalcula a altura
   raiz->altura = 1 + (altura(raiz->esquerda) > altura(raiz->direita)
                           ? altura(raiz->esquerda)
                           : altura(raiz->direita));
@@ -100,7 +119,7 @@ NoCandidatoAVL *rotacionar_esquerda(NoCandidatoAVL *raiz) {
   return p1;
 }
 
-void ler_arquivo_arvore_binaria_AVL(ArvoreAVL *raiz, const char *caminho) {
+void ler_arquivo_arvore_AVL(ArvoreAVL *raiz, const char *caminho) {
   NoCandidatoAVL *arvore_avl = NULL;
   FILE *arquivo = fopen(caminho, "r");
   if (arquivo == NULL) {
@@ -115,6 +134,8 @@ void ler_arquivo_arvore_binaria_AVL(ArvoreAVL *raiz, const char *caminho) {
   fgets(linha, sizeof(linha), arquivo);
 
   while (fgets(linha, sizeof(linha), arquivo)) {
+
+    // Retira o último caractere '\n' da linha
     linha[strcspn(linha, "\n")] = 0;
     char *token;
     int i = 0;

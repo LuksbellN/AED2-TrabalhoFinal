@@ -72,7 +72,7 @@ int processar_dados(int estrutura_dados, struct candidato **vetor, ArvoreBinaria
     case OPCAO_ARVORE_AVL:
     {
         inicio = clock();
-        ler_arquivo_arvore_binaria_AVL(arvore_avl, caminho);
+        ler_arquivo_arvore_AVL(arvore_avl, caminho);
         if (arvore_avl->raiz == NULL)
         {
             fprintf(stderr, "Erro: Falha na leitura do arquivo para a árvore AVL.\n");

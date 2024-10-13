@@ -38,6 +38,7 @@ int ler_arquivo_vetor(const char *caminho, struct candidato **vetor,
     if (*indice >= *tamanho_atual) {
       realocar_vetor(vetor, tamanho_atual);
     }
+    // Retira o último caractere '\n' da linha
     linha[strcspn(linha, "\n")] = 0;
     char *token;
     int i = 0;
@@ -80,7 +81,7 @@ int ler_arquivo_vetor(const char *caminho, struct candidato **vetor,
       token = strtok(NULL, ";");
       i++;
     }
-
+    
     (*indice)++;
   }
 

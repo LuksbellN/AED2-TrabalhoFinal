@@ -11,11 +11,19 @@
 #define OPCAO_ARVORE_BINARIA 2
 #define OPCAO_ARVORE_AVL 3
 
-int main() {
-  char *caminho = "./eleicoes2024-small.CSV";
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf("Por favor, forneça uma string com o caminho do arquivo.\n");
+    return 1; 
+  }
+
+  char *caminho = argv[1];
+
+
   struct candidato *vetor = NULL;
   ArvoreBinaria *raizBinaria = (ArvoreBinaria *)malloc(sizeof(ArvoreBinaria));
   ArvoreAVL *raizAVL = (ArvoreAVL *)malloc(sizeof(ArvoreAVL));
+  
   srand(time(NULL));
 
   int estrutura_dados;
@@ -26,10 +34,6 @@ int main() {
 
   int indice =
       processar_dados(estrutura_dados, &vetor, raizBinaria, raizAVL, caminho);
-
-  if (raizBinaria == NULL) {
-    printf("ueee");
-  }
 
   int condicional_de_funcionamento = 1;
   while (condicional_de_funcionamento != 4) {

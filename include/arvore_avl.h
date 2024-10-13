@@ -7,8 +7,10 @@ NoCandidatoAVL *
 insere_arvore_binaria_AVL(NoCandidatoAVL *raiz,
                           const struct candidato *novo_candidato);
 
-void ler_arquivo_arvore_binaria_AVL(ArvoreAVL *raiz, const char *caminho);
+void ler_arquivo_arvore_AVL(ArvoreAVL *raiz, const char *caminho);
 
+NoCandidatoAVL* rebalancear_arvore(NoCandidatoAVL* raiz, const struct candidato* novo_candidato, int balanco);
+  
 NoCandidatoAVL *rotacionar_direita(NoCandidatoAVL *raiz);
 NoCandidatoAVL *rotacionar_esquerda(NoCandidatoAVL *raiz);
 
