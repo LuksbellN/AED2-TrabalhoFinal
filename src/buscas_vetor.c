@@ -4,7 +4,50 @@
 #include <string.h>
 #include <time.h>
 
-int compararOrdenacao(struct candidato cand1, struct candidato cand2) {
+int compararOrdenacao_estado_cidade(struct candidato cand1, struct candidato cand2) {
+  // Comparar o estado
+  int cmp = strcmp(cand1.estado, cand2.estado);
+  if (cmp != 0)
+    return cmp;
+
+  // Comparar a cidade
+  cmp = strcmp(cand1.cidade, cand2.cidade);
+  if (cmp != 0)
+    return cmp;
+  return 0;
+}
+
+void busca_binaria_estado_cidade(candidato *vetor, int inicio, int fim,
+                                candidato *chave,candidato **vetorResultado,int *tamanhoResultado,
+                            int *capacidadeResultado) {
+  if (inicio > fim) {
+    return; //Finaliza a busca
+  }
+  int meio = (inicio + fim) / 2;
+  int cmp = compararOrdenacao_estado_cidade(vetor[meio], *chave);
+
+  if (cmp == 0) {
+    adicionar_ao_vetor_resultado(vetorResultado, tamanhoResultado,
+                                 capacidadeResultado, &vetor[meio]);
+    busca_binaria_estado_cidade(vetor,meio+1,fim+1,chave,vetorResultado, tamanhoResultado,
+                         capacidadeResultado);
+    if (inicio-1 >=0)
+    {
+      inicio--;
+    }
+    busca_binaria_estado_cidade(vetor,inicio,meio-1,chave,vetorResultado, tamanhoResultado,
+                         capacidadeResultado);
+
+  } else if (cmp < 0) {
+    return busca_binaria_estado_cidade(vetor, meio + 1, fim, chave,vetorResultado, tamanhoResultado,
+                         capacidadeResultado);
+  } else {
+    return busca_binaria_estado_cidade(vetor, inicio, meio - 1, chave,vetorResultado, tamanhoResultado,
+                         capacidadeResultado);
+  }
+}
+
+int compararOrdenacao_estado_cidade_nr_candidato(struct candidato cand1, struct candidato cand2) {
   // Comparar o estado
   int cmp = strcmp(cand1.estado, cand2.estado);
   if (cmp != 0)
@@ -19,20 +62,20 @@ int compararOrdenacao(struct candidato cand1, struct candidato cand2) {
   return cand1.nr_candidato - cand2.nr_candidato;
 }
 
-struct candidato *busca_binaria(candidato *vetor, int inicio, int fim,
+struct candidato *busca_binaria_estado_cidade_nr_candidato(candidato *vetor, int inicio, int fim,
                                 candidato *chave) {
   if (inicio > fim) {
     return NULL; // não achou
   }
   int meio = (inicio + fim) / 2;
-  int cmp = compararOrdenacao(vetor[meio], *chave);
+  int cmp = compararOrdenacao_estado_cidade_nr_candidato(vetor[meio], *chave);
 
   if (cmp == 0) {
     return &vetor[meio]; // achou
   } else if (cmp < 0) {
-    return busca_binaria(vetor, meio + 1, fim, chave);
+    return busca_binaria_estado_cidade_nr_candidato(vetor, meio + 1, fim, chave);
   } else {
-    return busca_binaria(vetor, inicio, meio - 1, chave);
+    return busca_binaria_estado_cidade_nr_candidato(vetor, inicio, meio - 1, chave);
   }
 }
 
@@ -67,16 +110,29 @@ ResultadoDinamico busca_estado_cidade_vetor(candidato *vetor, int indice,
   int capacidadeResultado = 10;
   struct candidato *vetorResultado =
       malloc(capacidadeResultado * sizeof(struct candidato));
+  struct candidato chave;
+  strcpy(chave.estado, estado);
+  strcpy(chave.cidade, cidade);
+  chave.nr_candidato = 0; // o valor recebido pode ser qualque um pois não será comparado
 
   time_t inicio, fim;
   double t;
   inicio = clock();
 
-  // TODO
-  // Completar busca por estado e cidade
+  busca_binaria_estado_cidade(vetor, 0, indice - 1, &chave,&vetorResultado, &tamanhoResultado,
+                         &capacidadeResultado);
 
   fim = clock();
-  t = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    t = (double)(fim - inicio) / CLOCKS_PER_SEC;
+  
+      for (int i = 0; i < tamanhoResultado; i++) {
+
+      printf("Estado: %s, Cidade: %s, Nr: %d, Nome: %s\n",
+             vetorResultado[i].estado, vetorResultado[i].cidade,
+             vetorResultado[i].nr_candidato, vetorResultado[i].nm_candidato);
+    }
+  printf("--------------------------------------------------------------\n\n");
+
 
   print_tempo(t);
 
@@ -98,7 +154,7 @@ void busca_estado_cidade_numero_vetor(struct candidato *vetor, int indice,
   chave.nr_candidato = nr_candidato;
 
   inicio = clock();
-  struct candidato *resultado = busca_binaria(vetor, 0, indice - 1, &chave);
+  struct candidato *resultado = busca_binaria_estado_cidade_nr_candidato(vetor, 0, indice - 1, &chave);
   fim = clock();
 
   if (resultado == NULL) {
