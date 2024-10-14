@@ -1,0 +1,41 @@
+./main.exe# Ignorar arquivos de objetos gerados
+*.o
+
+# Ignorar arquivos executáveis
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# Ignorar arquivos de depuração e logs
+*.log
+*.dmp
+*.stackdump
+
+# Ignorar o arquivo do editor de links (gerado pelo MinGW)
+*.ilk
+*.pdb
+
+# Ignorar arquivos temporários e de backup
+*.tmp
+*.swp
+*.swo
+*~
+.#*
+
+# Ignorar Makefile intermediário (opcional)
+Makefile.bak
+
+# Ignorar diretórios de build ou compilação customizados (opcional)
+build/
+bin/
+obj/
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos específicos de IDEs
+.vscode/
+.idea/
