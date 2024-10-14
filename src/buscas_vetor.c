@@ -29,12 +29,9 @@ void busca_binaria_estado_cidade(candidato *vetor, int inicio, int fim,
   if (cmp == 0) {
     adicionar_ao_vetor_resultado(vetorResultado, tamanhoResultado,
                                  capacidadeResultado, &vetor[meio]);
-    busca_binaria_estado_cidade(vetor,meio+1,fim+1,chave,vetorResultado, tamanhoResultado,
+    busca_binaria_estado_cidade(vetor,meio+1,fim,chave,vetorResultado, tamanhoResultado,
                          capacidadeResultado);
-    if (inicio-1 >=0)
-    {
-      inicio--;
-    }
+
     busca_binaria_estado_cidade(vetor,inicio,meio-1,chave,vetorResultado, tamanhoResultado,
                          capacidadeResultado);
 
