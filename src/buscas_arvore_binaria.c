@@ -58,8 +58,8 @@ void busca_recursiva_estado(NoCandidato *raiz, char *estado,
 struct candidato *busca_recursiva_estado_cidade_numero_candidato_binaria(NoCandidato *raiz, char *estado, char *cidade,
                                       int nr_candidato) {
   if (raiz == NULL) {
-    ("Falha ao encontrar candidato\n");
-    return;
+    printf("Falha ao encontrar candidato\n");
+    return NULL;
   }
 
   // Verifica se o estado do nó atual é menor, igual ou maior
