@@ -75,7 +75,7 @@ void busca_recursiva_estado_cidade(NoCandidatoAVL *raiz, char *estado,
   }
 }
 
-ResultadoDinamico busca_estado_arvore_binaria_AVL(NoCandidatoAVL *raiz, char *estado) {
+ResultadoDinamico busca_estado_arvore_AVL(NoCandidatoAVL *raiz, char *estado) {
   int tamanhoResultado = 0;
   int capacidadeResultado = 10;
   struct candidato *vetorResultado =
