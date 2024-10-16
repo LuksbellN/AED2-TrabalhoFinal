@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 void busca_estado(struct candidato *vetor, int indice, ArvoreBinaria *arvore,
                   ArvoreAVL *arvore_avl, int estrutura_dados) {
   ResultadoDinamico resultado;
@@ -77,8 +76,9 @@ void busca_estado_cidade(struct candidato *vetor, int indice,
         busca_estado_cidade_arvore_AVL(arvore_avl->raiz, estado, cidade);
   }
 
-  carregar_menu(&resultado);
-
+  if (resultado.tamanho > 0) {
+    carregar_menu(&resultado);
+  }
   free(estado);
   free(cidade);
 }

@@ -6,8 +6,9 @@
 #include "../include/buscas_arvore_avl.h"
 
 void busca_recursiva_estado_AVL(NoCandidatoAVL *raiz, char *estado,
-                            candidato **vetorResultado, int *tamanhoResultado,
-                            int *capacidadeResultado) {
+                                candidato **vetorResultado,
+                                int *tamanhoResultado,
+                                int *capacidadeResultado) {
   if (raiz == NULL) {
     return;
   }
@@ -18,11 +19,11 @@ void busca_recursiva_estado_AVL(NoCandidatoAVL *raiz, char *estado,
   if (cmp < 0) {
     // Procura na subárvore esquerda
     busca_recursiva_estado_AVL(raiz->esquerda, estado, vetorResultado,
-                           tamanhoResultado, capacidadeResultado);
+                               tamanhoResultado, capacidadeResultado);
   } else if (cmp > 0) {
     // Procura na subárvore direita
     busca_recursiva_estado_AVL(raiz->direita, estado, vetorResultado,
-                           tamanhoResultado, capacidadeResultado);
+                               tamanhoResultado, capacidadeResultado);
   } else {
     // Adiciona o candidato ao vetor se o estado for igual
     adicionar_ao_vetor_resultado(vetorResultado, tamanhoResultado,
@@ -31,9 +32,9 @@ void busca_recursiva_estado_AVL(NoCandidatoAVL *raiz, char *estado,
     // Continua procurando na esquerda e direita para encontrar todos os
     // candidatos com o mesmo estado
     busca_recursiva_estado_AVL(raiz->esquerda, estado, vetorResultado,
-                           tamanhoResultado, capacidadeResultado);
+                               tamanhoResultado, capacidadeResultado);
     busca_recursiva_estado_AVL(raiz->direita, estado, vetorResultado,
-                           tamanhoResultado, capacidadeResultado);
+                               tamanhoResultado, capacidadeResultado);
   }
 }
 
@@ -85,7 +86,7 @@ ResultadoDinamico busca_estado_arvore_AVL(NoCandidatoAVL *raiz, char *estado) {
   inicio = clock();
 
   busca_recursiva_estado_AVL(raiz, estado, &vetorResultado, &tamanhoResultado,
-                         &capacidadeResultado);
+                             &capacidadeResultado);
   if (tamanhoResultado == 0) {
     printf("Não foram encontrado resultados\n");
   } else {
@@ -109,6 +110,7 @@ ResultadoDinamico busca_estado_arvore_AVL(NoCandidatoAVL *raiz, char *estado) {
                                  .vetor = vetorResultado};
   return resultado;
 }
+
 ResultadoDinamico busca_estado_cidade_arvore_AVL(NoCandidatoAVL *raiz,
                                                  char *estado, char *cidade) {
   int tamanhoResultado = 0;
@@ -148,21 +150,72 @@ ResultadoDinamico busca_estado_cidade_arvore_AVL(NoCandidatoAVL *raiz,
   return resultado;
 }
 
+int compararOrdenacao_estado_cidade_nr_candidato_AVL(char *estado, char *cidade,
+                                                     int *nr_candidato,
+                                                     struct candidato cand2) {
+  // Comparar o estado
+  int cmp = strcmp(estado, cand2.estado);
+  if (cmp != 0)
+    return cmp;
+
+  // Comparar a cidade
+  cmp = strcmp(cidade, cand2.cidade);
+  if (cmp != 0)
+    return cmp;
+
+  // Comparar o número do candidato
+  return *nr_candidato - cand2.nr_candidato;
+}
+
+struct candidato *busca_recursiva_estado_cidade_numero_AVL(NoCandidatoAVL *raiz,
+                                                           char *estado,
+                                                           char *cidade,
+                                                           int nr_candidato) {
+  if (raiz == NULL) {
+    printf("Falha ao encontrar candidato\n");
+    return NULL;
+  }
+
+  // Verifica se o estado do nó atual é menor, igual ou maior
+  int cmp = compararOrdenacao_estado_cidade_nr_candidato_AVL(
+      estado, cidade, &nr_candidato, raiz->candidato);
+
+  if (cmp < 0) {
+    // Procura na subárvore esquerda
+    return busca_recursiva_estado_cidade_numero_AVL(raiz->esquerda, estado,
+                                                    cidade, nr_candidato);
+  } else if (cmp > 0) {
+    // Procura na subárvore direita
+    return busca_recursiva_estado_cidade_numero_AVL(raiz->direita, estado,
+                                                    cidade, nr_candidato);
+  } else {
+
+    return &(raiz->candidato);
+  }
+}
+
 void busca_estado_cidade_numero_arvore_AVL(NoCandidatoAVL *raiz, char *estado,
                                            char *cidade, int nr_candidato) {
   time_t inicio, fim;
   double t;
-  inicio = clock();
 
+  inicio = clock();
   struct candidato chave;
   strcpy(chave.estado, estado);
   strcpy(chave.cidade, cidade);
   chave.nr_candidato = nr_candidato;
-
-  // TODO
-  // Completar busca por estado, cidade e número
-
+  struct candidato *resultado = busca_recursiva_estado_cidade_numero_AVL(
+      raiz, estado, cidade, nr_candidato);
   fim = clock();
+  if (resultado == NULL) {
+    printf("Candidato não encontrado\n");
+  } else {
+    printf("\nResultado:\nEstado: %s, Cidade: %s, Nr: %d, Nome: %s\n\n",
+           resultado->estado, resultado->cidade, resultado->nr_candidato,
+           resultado->nm_candidato);
+  }
+
+  printf("--------------------------------------------------------------\n\n");
   t = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
   print_tempo(t);
